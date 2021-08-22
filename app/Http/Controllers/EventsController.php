@@ -181,11 +181,11 @@ class EventsController extends BaseController
 
     public function getFutureEventsWithWorkshops()
     {
-        $events = Event::with(['workshops' => function ($q) {
-                    $q->where('start', '>', Carbon::now());
-                }])
-                ->get()->all();
-            return response()->json($events);
+        $events = Event::with('workshops')->whereHas('workshops', function($q) {
+            $q->where('start', '>', Carbon::now());
+        })->get()->all();
+
+        return response()->json($events);
     }
 
 
